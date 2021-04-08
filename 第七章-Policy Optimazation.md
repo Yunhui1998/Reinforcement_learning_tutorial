@@ -139,8 +139,7 @@ $$
 \nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N}\left(\sum_{t=1}^{T} \nabla_{\theta} \log \pi_{\theta}\left(\mathbf{a}_{i, t} \mid \mathbf{s}_{i, t}\right)\right)\left(\sum_{t=1}^{T} r\left(\mathbf{s}_{i, t}, \mathbf{a}_{i, t}\right)\right)
 \end{array}$$
 
-这里我们可以看出，policy gradient相当于是加了权重的maximum likelihood，权重就是奖励值，也就是说ML是希望以后的策略都接近我们采样的那些数
-据，但是policy gradient 是希望策略去增大那些累积奖励高的轨迹出现的概率而抑制那些累积奖励低的轨迹出现的概率，这也是强化学习和模仿学习的差别，因为模仿学习里面我们拿到的是专家样本，我们默认它就是最好的或者说是累积奖励很高的，因此我们要做的只是去让我们的策略更像专家策略，也就是让我们学出来的策略的轨迹和专家样本的轨迹更像。
+这里我们可以看出，policy gradient相当于是加了权重的maximum likelihood，权重就是奖励值，也就是说ML是希望以后的策略都接近我们采样的那些数据，但是policy gradient 是希望策略去增大那些累积奖励高的轨迹出现的概率而抑制那些累积奖励低的轨迹出现的概率，这也是强化学习和模仿学习的差别，因为模仿学习里面我们拿到的是专家样本，我们默认它就是最好的或者说是累积奖励很高的，因此我们要做的只是去让我们的策略更像专家策略，也就是让我们学出来的策略的轨迹和专家样本的轨迹更像。
 
 可以通过下面的这个图来理解：**在强化学习中我们希望奖励高的轨迹出现的概率更大**。
 
@@ -164,7 +163,7 @@ $$
 
 因为在REINFORCE中，$$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N} \nabla_{\theta} \log \pi_{\theta}(\tau) r(\tau)$$，也就是后面有一个对轨迹奖励的一个加权，看下面这个例子：
 
-![image-20210223163431179](C:\Users\yunhu\AppData\Roaming\Typora\typora-user-images\image-20210223163431179.png)
+![image-20210407020013556](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210407020013556.png)
 
 我们先看黄色的bar作为第一种情况，如果我们有三条轨迹，他们的奖励值分别长成黄色的bar这种情况，那么我们最终得到的策略应该是图中的第二条线。
 
@@ -174,7 +173,7 @@ $$
 
 李宏毅老师课上也举过一个很好理解的例子，就是如果我们的奖励函数都是正数，那么对于我们所有采集的轨迹，它的概率都会上升，对于未采样到的trajectory，即使它是非常好的trajectory，它的概率是下降的，这显然很不合理。
 
-![微信截图_20210223164419](C:\Users\yunhu\Desktop\RL_code_from_scratch\强化学习的基本介绍.assets\微信截图_20210223164419.png)
+![image-20210407015624088](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/88.png)
 
 那么针对这个问题我们能有什么方法去缓解呢？
 
@@ -252,4 +251,4 @@ $$
 ##### Tips in Policy Gradient Descent
 
 - 首先policy gradient的variance是非常大的，它的gradient噪声比较大（来自trajectory的累积reward）。为了克服它，可以尝试将训练的batch size加到非常大。
-- 另外，由于gradient的noise很大，学习率会比较难调节，很多时候使用ADAM勉强可行。而一般而言，我们会使用类似PPO/TRPO那样的专用于policy gradient的自动确定学习步长的方式
+- 另外，由于gradient的noise很大，学习率会比较难调节，很多时候使用ADAM勉强可行。而一般而言，我们会使用类似PPO/TRPO那样的专用于policy gradient的自动确定学习步长的方法

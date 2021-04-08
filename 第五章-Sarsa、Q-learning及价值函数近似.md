@@ -1,6 +1,6 @@
 ## 第五章 Sarsa、Q-learning及价值函数近似
 
-#### Sarsa和Q-learning及其Python实现
+#### Sarsa和Q-learning及其Python实现 
 
 ##### Sarsa
 
@@ -37,7 +37,7 @@ The target policy $\pi$ is greedy on $Q(s, a)$
 
 ##### on policy和off-policy
 
-其实我觉得on-policy和off-policy之间差别就是看你优化的策略和你采数据的策略是不是同一个策略，如果是，那就是on-policy,如果不是，那就是off-policy。也就说off-policy有两个策略，一个是target policy,另一个是behavior policy。
+其实我觉得on-policy和off-policy之间差别就是看你优化的策略和你采数据的策略是不是同一个策略，如果是，那就是on-policy，如果不是，那就是off-policy。也就说off-policy有两个策略，一个是target policy，另一个是behavior policy。
 
 off-policy 相对于on-policy会有一些好处：
 
@@ -47,7 +47,7 @@ off-policy 相对于on-policy会有一些好处：
 
 ##### Importance sampling
 
- 重要性采样（Importance Sampling ）是统计中的一种采样方法。在强化学习中经常用到这种采样方法，特别是off-policy方法当中，我们会用通过与环境交互的策略采集到的数据来去优化我们的策略。它主要用在一些难以直接采样的数据分布上。我们虽然无法从这个分布函数采样，但我们还有其他常见的、可以采样的分布，我们能不能对上面的公式进行一些变换，使用常见的分布采样呢？我们令待采样的分布为p(x ） ，另一个简单可采样且定义域与p(x ）相同的概率密度函数为p(x ） ，我们可以得到
+ 重要性采样（Importance Sampling ）是统计中的一种采样方法。在强化学习中经常用到这种采样方法，特别是off-policy方法当中，我们会用通过与环境交互的策略采集到的数据来去优化我们的策略。它主要用在一些难以直接采样的数据分布上。我们虽然无法从这个分布函数采样，但我们还有其他常见的、可以采样的分布，我们能不能对上面的公式进行一些变换，使用常见的分布采样呢？我们令待采样的分布为p(x) ，另一个简单可采样且定义域与p(x) 相同的概率密度函数为p(x)，我们可以得到
 
 ​                                                                                                  $$\begin{aligned}
 \mathbb{E}_{T \sim \pi}[g(T)] &=\int P(T) g(T) d T \\
@@ -56,7 +56,7 @@ off-policy 相对于on-policy会有一些好处：
 & \approx \frac{1}{n} \sum_{i} \frac{P\left(T_{i}\right)}{Q\left(T_{i}\right)} g\left(T_{i}\right)
 \end{aligned}$$
 
-此时我们发现，公式变成了类似上一个方法的形式，而且我们只需要从这个简单 分布 $\tilde{p}(x)$ 中采样，然后分别计算样本在两个分布中的概率和函数值，最后将三者组合 起来就可以得到结果。选择一个合适的分布对重要性采样的重要d性： **要选择与原始分布尽可能接近的近似分布进行采样**。如果选择不当，最终结果不会很好。
+此时我们发现，公式变成了类似上一个方法的形式，而且我们只需要从这个简单 分布 $\tilde{p}(x)$ 中采样，然后分别计算样本在两个分布中的概率和函数值，最后将三者组合起来就可以得到结果。选择一个合适的分布对重要性采样的重要d性： **要选择与原始分布尽可能接近的近似分布进行采样**。如果选择不当，最终结果不会很好。
 
 **Why don't use importance sampling on Q-Learning?**
 
@@ -433,7 +433,7 @@ Stochastic gradient descent converges to global optimum. Because in the linear c
 
   如果包含这三个要素，很有可能不稳定性就难以避免，如果只出现两个要素，那么不稳定性就是有可能避免的。
 
-  在这三个要素中，FA是最不可能舍弃的，状态聚合或者非参数化的方法的复杂性随数据的增大而增大，都效果太差或价格太昂贵。
+  在这三个要素中，FA是最不可能舍弃的，状态聚合或者非参数化的方法的复杂性随数据的增大而增大，都是效果太差或价格太昂贵。
 
   不使用Boot strapping是有可能的，付出的代价是计算和数据上的效率。
 

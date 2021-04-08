@@ -12,7 +12,7 @@ $$\nabla_{\theta} J(\theta)=\frac{1}{N} \sum_{i=1}^{N} \sum_{t=0}^{T}\left[\nabl
 
 而在这里我们选择用牺牲一定的偏差来换取方差变小：Actor-Critic 用一个独立的模型估计轨迹的长期回报，而不再直接使用轨迹的真实回报。类似于基于模型的Q-Learning 算法，在估计时使用模型估计轨迹价值，在更新时利用轨迹的回报得到目标价值，然后将模型的估计值和目标值进行比较，从而改进模型。
 
-公式中可以被模型替代的部分有两个，其中 $\sum_{t^{\prime}=t}^{T} r\left(s_{i, t^{\prime}}, a_{i, t^{\prime}}\right)$ 代表从 $t$ 时刻出发 所获得的长期回报， $b_{i}$ 代表待减去的偏移量。根据这两个部分被模型替代的情况，我们可以得到以下几种方案：
+公式中可以被模型替代的部分有两个，其中 $\sum_{t^{\prime}=t}^{T} r\left(s_{i, t^{\prime}}, a_{i, t^{\prime}}\right)$ 代表从 $t$ 时刻出发所获得的长期回报， $b_{i}$ 代表待减去的偏移量。根据这两个部分被模型替代的情况，我们可以得到以下几种方案：
 
 - 采用策略梯度法的方法：公式由 $\sum_{t^{\prime}=t}^{T} r\left(s_{i, t^{\prime}}, \boldsymbol{a}_{i, t^{\prime}}\right)-\boldsymbol{b}_{i}$ 表示。
 - 使用状态值函数估计轨迹的回报 : $q(s, a)_{\circ}$
@@ -50,12 +50,12 @@ $$
 
 ##### Temporal difference
 
-相对Monte Carlo方法直接使用整条轨迹来计算, Temporal difference引入了bootstrapped的 方法。在前面target y是由整段轨迹的reward累积来确定的, 但是如果在V估计准确的情况下，
+相对Monte Carlo方法直接使用整条轨迹来计算, Temporal difference引入了bootstrapped的方法。在前面target y是由整段轨迹的reward累积来确定的, 但是如果在V估计准确的情况下，
 它 其实也等于当前state采取某个action的reward加上下一个state的V值。这个也就是temporal difference方法降低采样需求的思路, 故而给予同样的目标函数下, target的值发生了改变：
 $$
 \text { training data: }\left\{(\mathbf{s}_{i, t}, \underbrace{r\left(\mathbf{s}_{i, t}, \mathbf{a}_{i, t}\right)+\hat{V}_{\phi}^{\pi}\left(\mathbf{s}_{i, t+1}\right)}_{y_{i, t}})\right\}
 $$
-这两种方法的对比其实非常像REINFORCE方法与Actor-Critic方法的对比。 MC方法使用了整条轨 迹作为target, 它可以理解为是unbiased的，但是由于估计中存在policy与dynamic的随机性, 所以variance非常高。而TD则是引入了适当的bias, 大幅度减少了variance, 也提高了训练速 度。
+这两种方法的对比其实非常像REINFORCE方法与Actor-Critic方法的对比。 MC方法使用了整条轨迹作为target, 它可以理解为是unbiased的，但是由于估计中存在policy与dynamic的随机性, 所以variance非常高。而TD则是引入了适当的bias, 大幅度减少了variance, 也提高了训练速度。
 
 #### Discount factor
 
@@ -85,7 +85,7 @@ $$
 
 ####  Actor Critic Design Decisions
 
-首先是我们是我们需要决定是用两个网络分别去拟合Actor网络和Critic网络还是分别去拟合：
+首先是我们是我们需要决定是用两个网络分别去拟合Actor网络和Critic网络还是用同一个网络去拟合：
 
 使用两个网络的优势是容易训练且稳定，缺点是没有共享feature，导致参数量增大，计算量也增大。而使用一个网络解决了两个网络的优势，但是有可能会出现两个部分冲突的问题
 
@@ -97,21 +97,21 @@ $$
 
 如果是连续的state形成的batch，state之间会存在很强的相关性；但是一般情况下，采用batch模式都会更有效地帮助我们降低方差。
 
-![image-20210225105518394](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225105518394](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225105518394.png)
 
 在采样数据的时候我们一般有两种方式：第一种是同步采样，在多个worker上采集样本，等到达到一定数量后，进行更新，等待更新完毕，在获取新的模型参数，进行下一个batch的采样。第二种则是异步采样，在各个worker上采集样本后，计算梯度后，将梯度传给learner，进行更新，learner在更新后分发新的参数。目前大型的学习系统通常是采用异步的模式，主要似乎因为速度比较快，但是这种方式可能会出现梯度延迟或者对于on-policy方法带来样本off-policy的问题，后面有许多算法都在解决这个问题。
 
-![image-20210225105731166](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225105731166](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225105731166.png)
 
 #### Critics as baselines
 
 前面提到的Actor-Critic方法和Policy Gradient方法各有优劣：Actor-Critic方法方差小但是有偏，Policy-Gradient无偏但是方差大：
 
-![image-20210225111621338](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225111621338](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225111621338.png)
 
 那我们就会有有一个想法是说能不能把这两种方法结合起来，形成类似下面的这种形式，在引入value function降低variance的情况下保持unbiased：
 
-![image-20210225111742618](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225111742618](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225111742618.png)
 
 传统的Advantage函数如下：
 
@@ -131,11 +131,11 @@ $$
 $$
 接下来我们再引入n-step的形式：
 
-![image-20210225112249569](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225112249569](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225112249569.png)
 
 我们发现上面的两种形式刚好是两个极端，前者使用了整条trajectory，后者仅仅使用了一个step，那么是否可以有个折中，从而达到base/variance的tradeoff？
 
-![image-20210225112351699](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/RL/image-20210225112249569.png)
+![image-20210225112351699](https://raw.githubusercontent.com/Yunhui1998/markdown_image/main/image-20210225112351699.png)
 
 于是我们就得到了下面这种n-step的形式：
 
